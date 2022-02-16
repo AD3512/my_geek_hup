@@ -1,0 +1,19 @@
+.edit {
+  box-sizing: border-box;
+  :global {
+    .input {
+      background-color: #ddd;
+      border-radius: 5px;
+      width: 90%;
+      margin: 10px 5% 0;
+      padding: 10px 5px;
+    }
+    .textArea {
+      background-color: #ddd;
+      border-radius: 5px;
+      width: 90%;
+      margin: 10px 5% 0;
+      padding: 10px 5px;
+    }
+  }
+}

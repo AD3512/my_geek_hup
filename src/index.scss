@@ -10,8 +10,41 @@ body,
   height: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 p,
 h2,
 h3 {
   margin: 0;
+}
+
+a {
+  color: rgb(160, 154, 154);
+  text-decoration: none;
+}
+
+@import '@scss/hairline.scss';
+
+.icon {
+  // 可以通过fontsize控制大小
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+:root:root {
+  --adm-color-primary: #fc6627;
+  --adm-color-success: #00b578;
+  --adm-color-warning: #ff8f1f;
+  --adm-color-danger: #ff3141;
+  --adm-color-white: #ffffff;
+  --adm-color-weak: #999999;
+  --adm-color-light: #cccccc;
+  --adm-border-color: #eeeeee;
+  --adm-font-size-main: 13px;
+  --adm-color-text: #333333;
 }

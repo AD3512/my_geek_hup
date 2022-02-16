@@ -1,0 +1,14 @@
+.layout {
+  position: relative;
+  height: 100%;
+  :global {
+    .tabBar {
+      position: absolute;
+      bottom: 0;
+      left: auto;
+      right: auto;
+      width: 100%;
+      border-top: 1px solid #ccc;
+    }
+  }
+}

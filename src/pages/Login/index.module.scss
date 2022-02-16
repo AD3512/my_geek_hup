@@ -1,0 +1,38 @@
+.login {
+  :global {
+    .btn {
+      background-color: var(--adm-color-warning);
+    }
+    .adm-list-body {
+      border-top: none;
+      border-bottom: none;
+    }
+    .adm-nav-bar {
+      background-color: skyblue;
+      border-bottom: 1px solid #ccc;
+    }
+    .adm-card {
+      .adm-card-header {
+        padding: 50px 10px;
+        border-bottom: none;
+        .adm-card-header-title {
+          font-weight: 400;
+          font-size: 24px;
+        }
+      }
+      .adm-card-body {
+        .adm--list {
+          .adm-list-body {
+            border: none !important;
+            .adm-list-item-content {
+              margin: 10px 0;
+            }
+          }
+        }
+        .adm-form-footer {
+          margin-top: 30px;
+        }
+      }
+    }
+  }
+}
