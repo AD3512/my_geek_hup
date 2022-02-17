@@ -24,8 +24,7 @@ export type LoginAction =
       payload: Token
     }
   | {
-      type: 'login/clearToken'
-      payload: ''
+      type: 'login/logout'
     }
 // -------------------------------profile----------------------------------------
 export type ProfileInitState = {

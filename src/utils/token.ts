@@ -28,5 +28,5 @@ export const removeToken = (): void => {
  * 判断token是否存在
  */
 export const hasToken = (): boolean => {
-  return !!getToken()
+  return !!getToken().token
 }

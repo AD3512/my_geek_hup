@@ -1,22 +1,25 @@
 import MyNavBar from '@/components/MyNavBar'
-import { getUserProfile, quitLogin } from '@/store/actions/profile'
-import { removeToken } from '@/utils/token'
-import { Button, DatePicker, Dialog, List, Popup } from 'antd-mobile'
-import { useState } from 'react'
+import { getUserProfile, uploadPhoto } from '@/store/actions/profile'
+import { Button, DatePicker, Dialog, List, Popup, Toast } from 'antd-mobile'
+import { useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styles from './index.module.scss'
 import { useInitalState } from '@/utils/hooks'
-import Edit from './components/Edit'
+import Edit from './Edit'
+import EditList from './EditList'
 import { editInfo } from '@/store/actions/profile'
 import { useDispatch } from 'react-redux'
+import { logout } from '@/store/actions/login'
 
 export type visibleRightType = {
   visibleRight: boolean
   type: type
 }
-export type type = '' | 'name' | 'intro' | 'birthday' | 'gender' | 'photo'
+export type type = '' | 'name' | 'intro' | 'birthday' | 'gender'
 
 export default function User() {
+  // 绑定上传input框
+  const updatePic = useRef<HTMLInputElement>(null)
   const history = useHistory()
   const dispatch = useDispatch()
 
@@ -26,7 +29,9 @@ export default function User() {
   const { userProfile } = useInitalState(getUserProfile, 'profile')
 
   const [showBirthday, setShowBirthday] = useState(false)
-  const [birthday, setBirthday] = useState(userProfile.birthday)
+  console.log(userProfile.birthday)
+
+  // const [birthday, setBirthday] = useState(userProfile.birthday)
 
   const onBirthdayShow = () => {
     setShowBirthday(true)
@@ -35,16 +40,39 @@ export default function User() {
     setShowBirthday(false)
   }
   // -----------------------------修改头像 性别----------------------------------
-  const [photoVs, setPhotoVs] = useState(false)
-  const [sex, setSex] = useState('')
-  const handel = (type: 'gender' | 'photo') => {
-    setPhotoVs(true)
-    setSex(type)
+  // 弹层控制
+  const [EditListShow, setEditListShow] = useState(false)
+  const onEditListShow = () => {
+    setEditListShow(true)
   }
-  // 修改性别
-  const handelSex = (type: 'gender' | 'photo', value: string) => {
-    setPhotoVs(false)
+  const onEditListHide = () => {
+    setEditListShow(false)
+  }
+  // 设置类型,判断修改头像还是性别
+  const [type, setType] = useState('')
+
+  const handel = (type: 'gender' | 'photo') => {
+    onEditListShow()
+    setType(type)
+  }
+  // ------------------------------修改性别-----------------------------------------
+  const handelSex = (type: 'gender', value: string) => {
+    onEditListHide()
+    // onBirthdayHide()
     submit(type, value)
+  }
+  // ---------------------------------修改头像--------------------------------------
+  const handelPic = () => {
+    updatePic.current?.click()
+  }
+  const handelFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0]
+    // console.log(file, 777)
+    const fd = new FormData()
+    fd.append('photo', file)
+    await dispatch(uploadPhoto(fd))
+    Toast.show('上传成功')
+    onEditListHide()
   }
 
   // ------------------------------修改昵称 简介----------------------------
@@ -61,9 +89,10 @@ export default function User() {
   }
   // -------------------------提交修改-------------------------
   const submit = (type: type, value: string) => {
-    console.log(type, value, 77777)
-    hideVisibleRight()
+    // console.log(type, value, 77777)
     dispatch(editInfo(type, value))
+    onBirthdayHide()
+    hideVisibleRight()
   }
 
   // -----------------------------退出登录---------------------
@@ -75,9 +104,9 @@ export default function User() {
     // 确认退出
     if (result) {
       // 清空仓库
-      quitLogin()
-      // 删token
-      removeToken()
+      dispatch(logout())
+      // 提示用户
+      Toast.show('退出成功')
       // 跳到登录页
       history.push('/login')
     }
@@ -147,22 +176,42 @@ export default function User() {
       {/* ---------------------------弹出层------------------------------- */}
       <Popup
         className="aa"
-        visible={photoVs}
+        visible={EditListShow}
         onMaskClick={() => {
-          setPhotoVs(false)
+          onEditListHide()
         }}
       >
-        {sex === 'photo' ? (
+        <input type="file" ref={updatePic} hidden onChange={handelFileUpload} />
+        <EditList
+          type={type}
+          hideList={onEditListHide}
+          handelSex={handelSex}
+          handelPic={handelPic}
+        ></EditList>
+        {/* {sex === 'photo' ? (
           <List className="photo">
-            <List.Item style={{ textAlign: 'center' }}>拍照</List.Item>
-            <List.Item style={{ textAlign: 'center' }}>本地选择</List.Item>
             <List.Item
               style={{ textAlign: 'center' }}
               arrow={false}
-              onClick={() => setPhotoVs(false)}
+              onClick={() => handelPic()}
+            >
+              拍照
+            </List.Item>
+            <List.Item
+              style={{ textAlign: 'center' }}
+              arrow={false}
+              onClick={() => handelPic()}
+            >
+              本地选择
+            </List.Item>
+            <List.Item
+              style={{ textAlign: 'center' }}
+              arrow={false}
+              onClick={() =>  onEditListHide()}
             >
               取消
             </List.Item>
+            <input hidden type="file" ref={updatePic} />
           </List>
         ) : (
           <List className="gender">
@@ -183,27 +232,30 @@ export default function User() {
             <List.Item
               arrow={false}
               style={{ textAlign: 'center' }}
-              onClick={() => setPhotoVs(false)}
+              onClick={() =>  onEditListHide()}
             >
               取消
             </List.Item>
           </List>
-        )}
+        )} */}
       </Popup>
 
       {/* ------------------------------出生日期-------------------------------- */}
       <DatePicker
         visible={showBirthday}
-        onClose={() => {
+        onCancel={() => {
           onBirthdayHide()
         }}
+        value={new Date(userProfile.birthday)}
         title="选择出生日期"
         min={new Date('1900-01-01')}
-        value={new Date(birthday)}
         max={new Date()}
-        onConfirm={(val) => submit('birthday', dayjs(val).format('YYYY-MM-DD'))}
-        // onConfirm={(val) => console.log(dayjs(val).format('YYYY-MM-DD'))}
-        // onConfirm={(val) => console.log(val)}
+        onConfirm={(val) => {
+          console.log(userProfile.birthday)
+
+          console.log(val)
+          submit('birthday', dayjs(val).format('YYYY-MM-DD'))
+        }}
       ></DatePicker>
       {/* -----------------------------右侧弹出层-------------------------- */}
       <Popup

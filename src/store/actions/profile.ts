@@ -19,17 +19,25 @@ export const getUserProfile = (): RootThunkAction => {
   }
 }
 
-export const quitLogin = (): RootThunkAction => {
-  return (dispatch) => {
-    dispatch({ type: 'profile/clearUserProfile', payload: '' })
-    dispatch({ type: 'login/clearToken', payload: '' })
-  }
-}
+// // 退出的action
+// export const quitLogin = (): RootThunkAction => {
+//   return async (dispatch) => {
+//     await dispatch({ type: 'profile/clearUserProfile', payload: '' })
+//     await dispatch({ type: 'login/clearToken', payload: '' })
+//   }
+// }
 export const editInfo = (type: type, value: string): RootThunkAction => {
   // console.log(type, value)
   return async (dispatch) => {
     await request.patch('/user/profile', { [type]: value })
     // 重新渲染
-    dispatch(getUserProfile())
+    await dispatch(getUserProfile())
+  }
+}
+export const uploadPhoto = (fd: FormData): RootThunkAction => {
+  return async (dispatch) => {
+    await request.patch('/user/photo', fd)
+    // 重新渲染
+    await dispatch(getUserProfile())
   }
 }

@@ -3,7 +3,7 @@ import styles from './index.module.scss'
 // 引入组件库组件
 import { Button, NavBar, Form, Input, Card, Toast } from 'antd-mobile'
 
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { InputRef } from 'antd-mobile/es/components/input'
@@ -17,6 +17,8 @@ import { LoginFormType } from '@/types/data'
 export default function Login() {
   const dispatch = useDispatch()
   const history = useHistory()
+  const location = useLocation<{ from: string }>()
+  console.log(location)
 
   // 使用useRef存id
   let timeId = useRef<number>(-1)
@@ -33,10 +35,10 @@ export default function Login() {
 
   // 提交表单验证登录
   const submitLoginInfo = async (values: LoginFormType) => {
+    const pathname = location?.state?.from || '/home'
     // 获取input错误信息
-    console.log(values, 111)
     await dispatch(login(values))
-    history.push('/home')
+    history.replace(pathname)
     Toast.show({
       icon: 'success',
       content: '登录成功',

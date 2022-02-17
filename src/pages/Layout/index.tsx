@@ -9,6 +9,7 @@ import Home from '@/pages/Home'
 import Question from '@/pages/Question'
 import Video from '@/pages/Video'
 import Profile from '@/pages/Profile'
+import PrivateRoute from '@/components/PrivateRoute'
 
 export default function Layout() {
   const tabs = [
@@ -53,9 +54,9 @@ export default function Layout() {
         <Route path="/home/video">
           <Video />
         </Route>
-        <Route path="/home/profile">
+        <PrivateRoute component={Profile} path="/home/profile">
           <Profile />
-        </Route>
+        </PrivateRoute>
       </Switch>
       {/* 底部导航栏 */}
       <TabBar
