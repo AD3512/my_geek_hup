@@ -12,7 +12,7 @@ export default function PrivateRoute({
   ...rest
 }: PrivateRouteType) {
   const location = useLocation()
-  console.log(hasToken())
+  // console.log(hasToken())
 
   return (
     <Route

@@ -1,7 +1,28 @@
 .home {
+  width: 100vw;
+  position: absolute;
   :global {
     .adm-tabs-tab-active {
       color: var(--adm-color-warning);
+    }
+    .adm-tabs {
+      flex: 1;
+    }
+    .right_icon {
+      width: 50px;
+      height: 37px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: #fff;
+      z-index: 99;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .my_icon {
+      font-size: 20px;
+      margin-left: 5px;
     }
   }
 }

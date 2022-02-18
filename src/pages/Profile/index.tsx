@@ -2,10 +2,11 @@ import Icon from '@/components/Icon'
 import { Card, TabBar } from 'antd-mobile'
 import styles from './index.module.scss'
 import { getUser } from '@/store/actions/profile'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useInitalState } from '@/utils/hooks'
 export default function User() {
   const { user } = useInitalState(getUser, 'profile')
+  const history = useHistory()
 
   const tabs1 = [
     {
@@ -45,14 +46,19 @@ export default function User() {
   ]
   const tabs3 = [
     {
+      key: '/opinion',
       title: '用户反馈',
       icon: <Icon type="icon-fankui-bangzhu" />,
     },
     {
+      key: '/chat',
       title: '小智同学',
       icon: <Icon type="icon-kefuguanli" />,
     },
   ]
+  const setRouteActive = (value: string) => {
+    history.push(value)
+  }
 
   return (
     <div className={styles.profile}>
@@ -85,9 +91,9 @@ export default function User() {
         </TabBar>
       </Card>
       <Card className="profile_card" title="更多服务">
-        <TabBar>
+        <TabBar onChange={(value) => setRouteActive(value)}>
           {tabs3.map((item) => (
-            <TabBar.Item key={item.title} icon={item.icon} title={item.title} />
+            <TabBar.Item key={item.key} icon={item.icon} title={item.title} />
           ))}
         </TabBar>
       </Card>
