@@ -7,6 +7,7 @@ import { useInitalState } from '@/utils/hooks'
 import Channels from './Channels'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/types/store'
+import ArticleList from '@/pages/Home/ArticleList'
 export default function Home() {
   const dispatch = useDispatch()
 
@@ -23,6 +24,8 @@ export default function Home() {
 
   const { userChannels } = useInitalState(getChannels, 'home')
   const { allChannels } = useInitalState(getAllChannels, 'home')
+
+  // console.log(allChannels)
 
   // const selectChannels = allChannels.filter((item) => {
   //   const index = userChannels.findIndex((obj) => obj.id === item.id)
@@ -41,7 +44,8 @@ export default function Home() {
       >
         {userChannels.map((item) => (
           <Tabs.Tab title={item.name} key={item.id}>
-            {item.id + '---------------' + item.name}
+            {/* {item.id + '---------------' + item.name} */}
+            <ArticleList channel_id={item.id}></ArticleList>
           </Tabs.Tab>
         ))}
       </Tabs>

@@ -1,7 +1,7 @@
 // -----------------------------请求channels列表----------------------------------
 
 import { ApiResponse } from '@/types/data'
-import { Channel, RootThunkAction } from '@/types/store'
+import { Article, Channel, RootThunkAction } from '@/types/store'
 import request from '@/utils/request'
 import { getLocalChannels, hasToken, setLocalChannels } from '@/utils/token'
 import { Toast } from 'antd-mobile'
@@ -93,5 +93,34 @@ export const addChannel = (channel: Channel): RootThunkAction => {
     }
     Toast.show('添加成功')
     dispatch(getChannels())
+  }
+}
+
+type article = {
+  pre_timestamp: string
+  results: Article[]
+}
+
+export const getArticles = (
+  channel_id: number,
+  timestamp: string
+): RootThunkAction => {
+  return async (dispatch) => {
+    const res = await request.get<ApiResponse<article>>('/articles', {
+      params: {
+        channel_id,
+        timestamp,
+      },
+    })
+
+    console.log(res.data.data.results, 9999)
+    dispatch({
+      type: 'home/saveChangeActives',
+      payload: {
+        channel_id,
+        timestamp: res.data.data.pre_timestamp,
+        articles: res.data.data.results,
+      },
+    })
   }
 }

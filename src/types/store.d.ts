@@ -85,14 +85,42 @@ export type HomeAction =
       type: 'home/changeActive'
       payload: number
     }
+  | {
+      type: 'home/saveChangeActives'
+      payload: {
+        channel_id: number
+        timestamp: string
+        articles: Article[]
+      }
+    }
 
 export type Home = {
   userChannels: Channel[]
   allChannels: Channel[]
   active: number
+  channelActive: {
+    [key: number]: {
+      timestamp: string
+      articles: Article[]
+    }
+  }
 }
 
 export type Channel = {
   id: number
   name: string
+}
+
+export type Article = {
+  art_id: string
+  title: string
+  aut_id: string
+  comm_count: string
+  pubdate: string
+  aut_name: string
+  is_top: number
+  cover: {
+    type: 0 | 1 | 3
+    images: string[]
+  }
 }

@@ -5,10 +5,17 @@
     .adm-tabs-tab-active {
       color: var(--adm-color-warning);
     }
+
     .adm-tabs {
       flex: 1;
+      .adm-tabs-content {
+        height: 88vh;
+        // overflow: hidden;
+      }
       .adm-tabs-tab-list {
-        right: 40px;
+        // right: 40px;
+        // left: 0;
+        padding-right: 40px;
       }
     }
     .right_icon {
