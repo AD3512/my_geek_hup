@@ -7,6 +7,9 @@
     }
     .adm-tabs {
       flex: 1;
+      .adm-tabs-tab-list {
+        right: 40px;
+      }
     }
     .right_icon {
       width: 50px;

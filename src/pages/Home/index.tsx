@@ -2,10 +2,14 @@ import styles from './index.module.scss'
 import { Popup, Tabs } from 'antd-mobile'
 import Icon from '@/components/Icon'
 import { useState } from 'react'
-import { getAllChannels, getChannels } from '@/store/actions/home'
+import { changeActive, getAllChannels, getChannels } from '@/store/actions/home'
 import { useInitalState } from '@/utils/hooks'
 import Channels from './Channels'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/types/store'
 export default function Home() {
+  const dispatch = useDispatch()
+
   const [visible, setVisible] = useState(false)
 
   const show = () => {
@@ -14,6 +18,8 @@ export default function Home() {
   const hide = () => {
     setVisible(false)
   }
+
+  const { active } = useSelector((state: RootState) => state.home)
 
   const { userChannels } = useInitalState(getChannels, 'home')
   const { allChannels } = useInitalState(getAllChannels, 'home')
@@ -28,7 +34,11 @@ export default function Home() {
   return (
     <div className={styles.home}>
       {/* 顶部导航 */}
-      <Tabs defaultActiveKey="0">
+      <Tabs
+        defaultActiveKey={0 + ''}
+        activeKey={active + ''}
+        onChange={(key) => dispatch(changeActive(+key))}
+      >
         {userChannels.map((item) => (
           <Tabs.Tab title={item.name} key={item.id}>
             {item.id + '---------------' + item.name}

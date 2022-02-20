@@ -81,13 +81,18 @@ export type HomeAction =
       type: 'home/getAllChannels'
       payload: Channel[]
     }
+  | {
+      type: 'home/changeActive'
+      payload: number
+    }
 
 export type Home = {
   userChannels: Channel[]
   allChannels: Channel[]
+  active: number
 }
 
 export type Channel = {
-  id: string
+  id: number
   name: string
 }

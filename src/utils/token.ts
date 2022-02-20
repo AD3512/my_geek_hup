@@ -1,8 +1,9 @@
 // ------------------------------------封装所有关于token的api-------------------------------
 
-import { Token } from '@/types/store'
+import { Channel, Token } from '@/types/store'
 
 const TOKEN_KEY = 'hm-geek-token'
+const Channel_KEY = 'hm-geek-channels'
 /**
  * 获取token
  */
@@ -29,4 +30,19 @@ export const removeToken = (): void => {
  */
 export const hasToken = (): boolean => {
   return !!getToken().token
+}
+
+/**
+ * 获取本地channels
+ */
+export const getLocalChannels = (): Channel[] => {
+  return JSON.parse(localStorage.getItem(Channel_KEY) || '[]')
+}
+
+/**
+ * 设置本地channels
+ * @param channel
+ */
+export const setLocalChannels = (channels: Channel[]) => {
+  localStorage.setItem(Channel_KEY, JSON.stringify(channels))
 }
