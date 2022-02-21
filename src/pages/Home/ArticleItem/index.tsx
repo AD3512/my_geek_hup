@@ -1,6 +1,7 @@
 import classnames from 'classnames'
 
 import Icon from '@/components/Icon'
+import Img from '@/components/Img'
 
 import styles from './index.module.scss'
 import { Article } from '@/types/store'
@@ -39,7 +40,7 @@ const ArticleItem = ({ articleList }: Props) => {
           <div className="article-imgs">
             <div className="article-img-wrapper">
               {images.map((item, index) => (
-                <img key={index} src={item} alt="" />
+                <Img key={index} src={item} />
               ))}
             </div>
           </div>

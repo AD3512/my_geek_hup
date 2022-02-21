@@ -1,10 +1,11 @@
 import MyNavBar from '@/components/MyNavBar'
 import styles from './index.module.scss'
+import Img from '@/components/Img'
 const Question = () => {
   return (
     <div className={styles.root}>
       <MyNavBar>问答</MyNavBar>
-      <div className="question-list">
+      {/* <div className="question-list">
         <div className="question-item">
           <div className="left">
             <h3>作为 IT 行业的过来人，你有什么话想对后辈说的？</h3>
@@ -85,7 +86,8 @@ const Question = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
+      <Img src="https://pic1.zhimg.com/80/v2-8e77b2771314f674cccba5581560d333_xl.jpg?source=4e949a73"></Img>
     </div>
   )
 }
