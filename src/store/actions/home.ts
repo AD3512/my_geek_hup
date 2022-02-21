@@ -113,9 +113,33 @@ export const getArticles = (
       },
     })
 
-    console.log(res.data.data.results, 9999)
+    // console.log(res.data.data.results, 9999)
     dispatch({
       type: 'home/saveChangeActives',
+      payload: {
+        channel_id,
+        timestamp: res.data.data.pre_timestamp,
+        articles: res.data.data.results,
+      },
+    })
+  }
+}
+export const getArticlesReresh = (
+  channel_id: number,
+  timestamp: string
+): RootThunkAction => {
+  return async (dispatch) => {
+    const res = await request.get<ApiResponse<article>>('/articles', {
+      params: {
+        channel_id,
+        timestamp,
+      },
+    })
+
+    // console.log(timestamp, 343243)
+
+    dispatch({
+      type: 'home/refreshChannelArticles',
       payload: {
         channel_id,
         timestamp: res.data.data.pre_timestamp,

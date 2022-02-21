@@ -2,11 +2,11 @@ import ArticleItem from '../ArticleItem'
 
 import styles from './index.module.scss'
 
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getArticles } from '@/store/actions/home'
+import { getArticles, getArticlesReresh } from '@/store/actions/home'
 import { RootState } from '@/types/store'
-import { InfiniteScroll } from 'antd-mobile'
+import { InfiniteScroll, PullToRefresh } from 'antd-mobile'
 
 const ArticleList = ({ channel_id }: { channel_id: number }) => {
   const dispatch = useDispatch()
@@ -34,13 +34,20 @@ const ArticleList = ({ channel_id }: { channel_id: number }) => {
   return (
     <div className={styles.root}>
       {/* 文章列表中的每一项 */}
-      <div className="article-item">
-        {/* <ArticleItem /> */}
-        {articles.map((item) => (
-          <ArticleItem key={item.art_id} articleList={item} />
-        ))}
-      </div>
-      <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+      <PullToRefresh
+        onRefresh={async () => {
+          console.log('下拉刷新')
+          dispatch(getArticlesReresh(channel_id, +new Date() + ''))
+        }}
+      >
+        <div className="article-item">
+          {/* <ArticleItem /> */}
+          {articles.map((item) => (
+            <ArticleItem key={item.art_id} articleList={item} />
+          ))}
+        </div>
+        <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+      </PullToRefresh>
     </div>
   )
 }

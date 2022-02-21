@@ -93,6 +93,14 @@ export type HomeAction =
         articles: Article[]
       }
     }
+  | {
+      type: 'home/refreshChannelArticles'
+      payload: {
+        channel_id: number
+        timestamp: string
+        articles: Article[]
+      }
+    }
 
 export type Home = {
   userChannels: Channel[]

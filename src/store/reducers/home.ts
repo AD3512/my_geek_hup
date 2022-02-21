@@ -25,7 +25,7 @@ const home = (prevState = initialState, action: HomeAction): Home => {
       return { ...prevState, allChannels: action.payload }
     case 'home/changeActive':
       return { ...prevState, active: action.payload }
-    case 'home/saveChangeActives':
+    case 'home/saveChangeActives': {
       const { channel_id, articles, timestamp } = action.payload
       const old = prevState.channelActive[channel_id]?.articles || []
       return {
@@ -37,6 +37,23 @@ const home = (prevState = initialState, action: HomeAction): Home => {
           },
         },
       }
+    }
+    case 'home/refreshChannelArticles': {
+      const { channel_id, articles, timestamp } = action.payload
+      const channelActive = prevState.channelActive
+      // console.log(timestamp, articles, 7777777777)
+
+      return {
+        ...prevState,
+        channelActive: {
+          ...channelActive,
+          [channel_id]: {
+            timestamp,
+            articles: [...articles],
+          },
+        },
+      }
+    }
     default:
       return prevState
   }
