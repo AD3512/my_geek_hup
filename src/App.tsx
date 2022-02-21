@@ -9,6 +9,8 @@ import Login from '@/pages/Login'
 import Profile from '@/pages/Profile/User'
 import Chat from '@/pages/Profile/Chat'
 import Opinion from '@/pages/Profile/Opinion'
+import Article from '@/pages/Home/Article'
+import Search from '@/pages/Search'
 // import Edit from '@/pages/Profile/Edit'
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
           <Redirect exact from="/" to="/login"></Redirect>
           <Route path="/login" component={Login}></Route>
           <Route path="/home" component={Layout}></Route>
+          <Route path="/article/:id" component={Article}></Route>
+          <Route path="/search" component={Search}></Route>
           {/* <Route path="/user/profile" component={Profile}></Route> */}
           <PrivateRoute path="/user/profile" component={Profile}></PrivateRoute>
           <PrivateRoute path="/chat" component={Chat}></PrivateRoute>

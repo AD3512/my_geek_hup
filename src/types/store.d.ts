@@ -3,6 +3,7 @@
 import store from '@/store'
 
 import { ThunkAction } from 'redux-thunk'
+import { searchSuggestion } from './data'
 
 // -------------------------------通用类型----------------------------------------
 export type RootState = ReturnType<typeof store.getState>
@@ -12,6 +13,7 @@ export type RootAction =
   | UserAction
   | UserProfileAction
   | HomeAction
+  | searchAction
 
 export type RootThunkAction = ThunkAction<void, RootState, unknown, RootAction>
 
@@ -132,3 +134,21 @@ export type Article = {
     images: string[]
   }
 }
+// --------------------------------search------------------------
+type searchInitType = {
+  suggestionList: searchSuggestion
+}
+
+type searchAction = {
+  type: 'search/getSuggestionList'
+  payload: searchSuggestion
+}
+// export type UserProfile = {
+//   id: string
+//   name: string
+//   photo: string
+//   mobile: string
+//   gender: number
+//   birthday: string
+//   intro: string
+// }

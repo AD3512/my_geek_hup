@@ -8,8 +8,11 @@ import Channels from './Channels'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/types/store'
 import ArticleList from '@/pages/Home/ArticleList'
+import { useHistory } from 'react-router-dom'
 export default function Home() {
   const dispatch = useDispatch()
+
+  const history = useHistory()
 
   const [visible, setVisible] = useState(false)
 
@@ -50,7 +53,13 @@ export default function Home() {
         ))}
       </Tabs>
       <div className="right_icon">
-        <Icon type="icon-sousuo" className="my_icon"></Icon>
+        <Icon
+          type="icon-sousuo"
+          className="my_icon"
+          onClick={() => {
+            history.push('/search')
+          }}
+        ></Icon>
         <Icon type="icon-liebiao" className="my_icon" onClick={show}></Icon>
       </div>
       <Popup position="left" visible={visible}>
