@@ -11,3 +11,4 @@ export type ApiResponse<T> = {
 }
 
 export type searchSuggestion = string[]
+export type History = string[]

@@ -4,6 +4,7 @@ import { Channel, Token } from '@/types/store'
 
 const TOKEN_KEY = 'hm-geek-token'
 const Channel_KEY = 'hm-geek-channels'
+const SEARCH_HISTORY_KEY = 'hm-geek-search-history'
 /**
  * 获取token
  */
@@ -45,4 +46,26 @@ export const getLocalChannels = (): Channel[] => {
  */
 export const setLocalChannels = (channels: Channel[]) => {
   localStorage.setItem(Channel_KEY, JSON.stringify(channels))
+}
+
+/**
+ * 获取本地搜索历史
+ */
+export const getLocalSearchHistory = (): string[] => {
+  return JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY) || '[]')
+}
+
+/**
+ * 设置本地搜索历史
+ * @param 数据
+ */
+export const setLocalSearchHistory = (arr: string[]) => {
+  localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify([...arr]))
+}
+/**
+ * 清除本地搜索历史
+ * @param 数据
+ */
+export const removeLocalSearchHistory = () => {
+  localStorage.removeItem(SEARCH_HISTORY_KEY)
 }

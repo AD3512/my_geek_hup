@@ -3,7 +3,7 @@
 import store from '@/store'
 
 import { ThunkAction } from 'redux-thunk'
-import { searchSuggestion } from './data'
+import { History, searchSuggestion } from './data'
 
 // -------------------------------通用类型----------------------------------------
 export type RootState = ReturnType<typeof store.getState>
@@ -137,18 +137,22 @@ export type Article = {
 // --------------------------------search------------------------
 type searchInitType = {
   suggestionList: searchSuggestion
+  historyList: History
 }
 
-type searchAction = {
-  type: 'search/getSuggestionList'
-  payload: searchSuggestion
-}
-// export type UserProfile = {
-//   id: string
-//   name: string
-//   photo: string
-//   mobile: string
-//   gender: number
-//   birthday: string
-//   intro: string
-// }
+type searchAction =
+  | {
+      type: 'search/getSuggestionList'
+      payload: searchSuggestion
+    }
+  | {
+      type: 'search/setHistory'
+      payload: History
+    }
+  | {
+      type: 'search/clearHistory'
+    }
+  | {
+      type: 'search/delHistory'
+      payload: History
+    }

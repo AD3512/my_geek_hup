@@ -8,7 +8,12 @@ import { useState } from 'react'
 // import Mock from 'mockjs'
 import { useDebounceFn } from 'ahooks'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSuggestionList } from '@/store/actions/search'
+import {
+  addHistory,
+  clearHistory,
+  delHistory,
+  getSuggestionList,
+} from '@/store/actions/search'
 import { RootState } from '@/types/store'
 
 const SearchPage = () => {
@@ -16,16 +21,20 @@ const SearchPage = () => {
   const dispatch = useDispatch()
 
   const [keyword, setKeyword] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
 
   // const timerId = useRef<number>(-1)
 
-  const { suggestionList } = useSelector((state: RootState) => state.search)
+  const { suggestionList, historyList } = useSelector(
+    (state: RootState) => state.search
+  )
 
   // console.log(suggestionList)
 
+  // 防抖发情求渲染
   const { run: getSuggestList } = useDebounceFn(
     (val) => {
-      console.log(val, '发请求')
+      // console.log(val, '发请求')
       if (!val) return
       dispatch(getSuggestionList(val))
     },
@@ -34,6 +43,7 @@ const SearchPage = () => {
     }
   )
 
+  // 高亮的正则表达式
   const heigtLight = (str: string) => {
     const reg = new RegExp(keyword, 'gi')
 
@@ -42,23 +52,28 @@ const SearchPage = () => {
     })
   }
 
+  // 搜索
+  const handelSearch = (val: string) => {
+    if (val.trim() === '') return
+    // console.log('搜索', val, '并存本地')
+    dispatch(addHistory(val))
+  }
+
   return (
     <div className={styles.root}>
       <NavBar
         className="navbar"
         onBack={() => history.go(-1)}
-        right={<span className="search-text">搜索</span>}
+        right={
+          <span className="search-text" onClick={() => handelSearch(keyword)}>
+            搜索
+          </span>
+        }
       >
         <SearchBar
           value={keyword}
-          // onChange={(val) => {
-          //   window.clearTimeout(timerId.current)
-          //   setKey(val)
-          //   timerId.current = window.setTimeout(() => {
-          //     console.log('发请求')
-          //   }, 1000)
-          // }}
           onChange={(val) => {
+            setIsSearching(val.length > 0 ? true : false)
             setKeyword(val)
             getSuggestList(val)
           }}
@@ -70,29 +85,43 @@ const SearchPage = () => {
         <div
           className="history"
           style={{
-            display: true ? 'none' : 'block',
+            display: isSearching ? 'none' : 'block',
           }}
         >
           <div className="history-header">
             <span>搜索历史</span>
-            <span>
+            <span onClick={() => dispatch(clearHistory())}>
               <Icon type="iconbtn_del" />
               清除全部
             </span>
           </div>
 
           <div className="history-list">
-            <span className="history-item">
-              <span className="text-overflow">黑马程序员</span>
-              <Icon type="iconbtn_essay_close" />
-            </span>
+            {historyList.map((item, index) => (
+              <span key={index} className="history-item">
+                <span
+                  className="text-overflow"
+                  onClick={() => handelSearch(item)}
+                >
+                  {item}
+                </span>
+                <Icon
+                  type="icon-guanbi"
+                  onClick={() => dispatch(delHistory(item))}
+                />
+              </span>
+            ))}
           </div>
         </div>
       )}
 
-      <div className={classnames('search-result', true ? 'show' : '')}>
+      <div className={classnames('search-result', isSearching ? 'show' : '')}>
         {suggestionList.map((item, index) => (
-          <div key={index} className="result-item">
+          <div
+            key={index}
+            className="result-item"
+            onClick={() => handelSearch(item)}
+          >
             <Icon className="icon-search" type="icon-sousuo1" />
             <div
               className="result-value text-overflow"
