@@ -10,6 +10,7 @@ import Question from '@/pages/Question'
 import Video from '@/pages/Video'
 import Profile from '@/pages/Profile'
 import PrivateRoute from '@/components/PrivateRoute'
+import KeepAlive from '@/components/KeepAlive'
 
 export default function Layout() {
   const tabs = [
@@ -44,10 +45,13 @@ export default function Layout() {
   return (
     <div className={styles.layout}>
       {/* 二级路由 */}
+      <KeepAlive path={'/home'} activePath="/home">
+        <Home></Home>
+      </KeepAlive>
       <Switch>
-        <Route exact path="/home">
+        {/* <Route exact path="/home">
           <Home />
-        </Route>
+        </Route> */}
         <Route path="/home/question">
           <Question />
         </Route>

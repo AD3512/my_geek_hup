@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   addHistory,
   clearHistory,
+  clearSearchResult,
   delHistory,
   getSuggestionList,
 } from '@/store/actions/search'
@@ -57,6 +58,9 @@ const SearchPage = () => {
     if (val.trim() === '') return
     // console.log('搜索', val, '并存本地')
     dispatch(addHistory(val))
+    dispatch(clearSearchResult())
+    // 跳转传参
+    history.push(`/search/result?keyword=${val}`)
   }
 
   return (
@@ -81,7 +85,7 @@ const SearchPage = () => {
         />
       </NavBar>
 
-      {true && (
+      {historyList.length > 0 && (
         <div
           className="history"
           style={{

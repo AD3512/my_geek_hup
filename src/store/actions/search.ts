@@ -1,5 +1,5 @@
 import { ApiResponse, searchSuggestion } from '@/types/data'
-import { RootThunkAction, searchAction } from '@/types/store'
+import { RootThunkAction, searchAction, SearchResultType } from '@/types/store'
 import request from '@/utils/request'
 import { removeLocalSearchHistory, setLocalSearchHistory } from '@/utils/token'
 
@@ -9,7 +9,6 @@ export const getSuggestionList = (val: string): RootThunkAction => {
       `/suggestion`,
       { params: { q: val } }
     )
-    console.log(res, 4655)
     let newRes: searchSuggestion
     if (res.data.data.options[0] === null) {
       newRes = []
@@ -23,6 +22,7 @@ export const getSuggestionList = (val: string): RootThunkAction => {
     })
   }
 }
+// 添加历史记录
 export const addHistory = (val: string): RootThunkAction => {
   return async (dispatch, getState) => {
     let historyList = getState().search.historyList
@@ -42,10 +42,14 @@ export const addHistory = (val: string): RootThunkAction => {
     dispatch({ type: 'search/setHistory', payload: historyList })
   }
 }
+
+// 清空历史记录
 export const clearHistory = (): searchAction => {
   removeLocalSearchHistory()
   return { type: 'search/clearHistory' }
 }
+
+// 删除历史记录
 export const delHistory = (val: string): RootThunkAction => {
   return async (dispatch, getState) => {
     let historyList = getState().search.historyList
@@ -55,5 +59,31 @@ export const delHistory = (val: string): RootThunkAction => {
     setLocalSearchHistory(historyList)
 
     dispatch({ type: 'search/delHistory', payload: historyList })
+  }
+}
+// 获取搜索结果
+export const getSearch = (page: number, val: string): RootThunkAction => {
+  return async (dispatch, getState) => {
+    console.log(val, 888888)
+    const res = await request.get<ApiResponse<SearchResultType>>(`/search`, {
+      params: {
+        q: val,
+        page,
+        per_page: 10,
+      },
+    })
+    console.log(res.data.data, '发请求获取结果列表数据')
+
+    dispatch({
+      type: 'search/getSearchResults',
+      payload: res.data.data,
+    })
+  }
+}
+
+// 重置搜索结果
+export const clearSearchResult = (): searchAction => {
+  return {
+    type: 'search/clearSearchResults',
   }
 }

@@ -22,13 +22,7 @@ const ArticleList = ({ channel_id }: { channel_id: number }) => {
 
   const hasMore = timestamp === null ? false : true
   const loadMore = async () => {
-    const res = await dispatch(
-      getArticles(channel_id, timestamp || +new Date() + '')
-    )
-    console.log(res)
-    // if (timestamp === null) {
-    //   setHasMore(false)
-    // }
+    await dispatch(getArticles(channel_id, timestamp || +new Date() + ''))
   }
 
   // console.log(channelActive, channel_id, 888888)

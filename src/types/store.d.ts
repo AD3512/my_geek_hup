@@ -14,6 +14,7 @@ export type RootAction =
   | UserProfileAction
   | HomeAction
   | searchAction
+  | ArticleAction
 
 export type RootThunkAction = ThunkAction<void, RootState, unknown, RootAction>
 
@@ -138,6 +139,14 @@ export type Article = {
 type searchInitType = {
   suggestionList: searchSuggestion
   historyList: History
+  searchResult: SearchResultType
+}
+
+type SearchResultType = {
+  page: number
+  per_page: number
+  results: Article[]
+  total_count: number
 }
 
 type searchAction =
@@ -156,3 +165,32 @@ type searchAction =
       type: 'search/delHistory'
       payload: History
     }
+  | {
+      type: 'search/getSearchResults'
+      payload: SearchResultType
+    }
+  | {
+      type: 'search/clearSearchResults'
+    }
+// --------------------------------------article------------------------
+type ArticleAction = {
+  type: 'article/getArticleInfo'
+  payload: ArticleDetail
+}
+
+// 文章详情
+export type ArticleDetail = {
+  art_id: string
+  attitude: number
+  aut_id: string
+  aut_name: string
+  aut_photo: string
+  comm_count: number
+  content: string
+  is_collected: boolean
+  is_followed: boolean
+  like_count: number
+  pubdate: string
+  read_count: number
+  title: string
+}

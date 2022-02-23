@@ -11,12 +11,18 @@ import Chat from '@/pages/Profile/Chat'
 import Opinion from '@/pages/Profile/Opinion'
 import Article from '@/pages/Home/Article'
 import Search from '@/pages/Search'
+import Result from '@/pages/Search/Result'
 // import Edit from '@/pages/Profile/Edit'
+
+import KeepAlive from '@/components/KeepAlive'
 
 function App() {
   return (
     <Router history={history}>
       <div className="app">
+        <KeepAlive path={'/home'} activePath="/home">
+          <Layout></Layout>
+        </KeepAlive>
         <Switch>
           {/* <Route
             exact
@@ -27,9 +33,10 @@ function App() {
 
           <Redirect exact from="/" to="/login"></Redirect>
           <Route path="/login" component={Login}></Route>
-          <Route path="/home" component={Layout}></Route>
+          {/* <Route path="/home" component={Layout}></Route> */}
           <Route path="/article/:id" component={Article}></Route>
-          <Route path="/search" component={Search}></Route>
+          <Route exact path="/search" component={Search}></Route>
+          <Route path="/search/result" component={Result}></Route>
           {/* <Route path="/user/profile" component={Profile}></Route> */}
           <PrivateRoute path="/user/profile" component={Profile}></PrivateRoute>
           <PrivateRoute path="/chat" component={Chat}></PrivateRoute>

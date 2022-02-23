@@ -1,14 +1,41 @@
 import { NavBar, InfiniteScroll } from 'antd-mobile'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import classNames from 'classnames'
 import styles from './index.module.scss'
 
 import Icon from '@/components/Icon'
 import CommentItem from './components/CommentItem'
 import CommentFooter from './components/CommentFooter'
+import { getArticleInfo } from '@/store/actions/article'
+import dayjs from 'dayjs'
+import DOMPurify from 'dompurify'
+
+import hljs from 'highlight.js'
+import 'highlight.js/styles/vs2015.css'
+
+import { useInitalState } from '@/utils/hooks'
+import { useEffect } from 'react'
 
 const Article = () => {
   const history = useHistory()
+
+  const { id } = useParams<{ id: string }>()
+
+  const { articleInfo } = useInitalState(() => getArticleInfo(id), 'article')
+
+  useEffect(() => {
+    // 配置 highlight.js
+    hljs.configure({
+      // 忽略未经转义的 HTML 字符
+      ignoreUnescapedHTML: true,
+    })
+    // 获取到内容中所有的code标签
+    const codes = document.querySelectorAll('.dg-html pre code')
+    codes.forEach((el) => {
+      // 让code进行高亮
+      hljs.highlightElement(el as HTMLElement)
+    })
+  }, [])
 
   const renderArticle = () => {
     // 文章详情
@@ -16,26 +43,36 @@ const Article = () => {
       <div className="wrapper">
         <div className="article-wrapper">
           <div className="header">
-            <h1 className="title">ES6 Promise 和 Async/await的使用</h1>
+            <h1 className="title">{articleInfo.title}</h1>
 
             <div className="info">
-              <span>2019-03-11</span>
-              <span>202 阅读</span>
-              <span>10 评论</span>
+              <span>{dayjs(articleInfo.pubdate).format('YYYY-MM-DD')}</span>
+              <span>{articleInfo.read_count} 阅读</span>
+              <span>{articleInfo.comm_count} 评论</span>
             </div>
 
             <div className="author">
-              <img src="http://geek.itheima.net/images/user_head.jpg" alt="" />
-              <span className="name">黑马先锋</span>
-              <span className={classNames('follow', true ? 'followed' : '')}>
-                {true ? '已关注' : '关注'}
+              <img src={articleInfo.aut_photo} alt="" />
+              <span className="name">{articleInfo.aut_name}</span>
+              <span
+                className={classNames(
+                  'follow',
+                  articleInfo.is_followed ? 'followed' : ''
+                )}
+              >
+                {articleInfo.is_followed ? '已关注' : '关注'}
               </span>
             </div>
           </div>
 
           <div className="content">
-            <div className="content-html dg-html" />
-            <div className="date">发布文章时间：2021-2-1</div>
+            <div
+              className="content-html dg-html"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(articleInfo.content),
+              }}
+            />
+            <div className="date">发布文章时间：{articleInfo.pubdate}</div>
           </div>
         </div>
 
@@ -73,10 +110,15 @@ const Article = () => {
         >
           {true && (
             <div className="nav-author">
-              <img src="http://geek.itheima.net/images/user_head.jpg" alt="" />
-              <span className="name">黑马先锋</span>
-              <span className={classNames('follow', true ? 'followed' : '')}>
-                {true ? '已关注' : '关注'}
+              <img src={articleInfo.aut_photo} alt="" />
+              <span className="name">{articleInfo.aut_name}</span>
+              <span
+                className={classNames(
+                  'follow',
+                  articleInfo.is_followed ? 'followed' : ''
+                )}
+              >
+                {articleInfo.is_followed ? '已关注' : '关注'}
               </span>
             </div>
           )}

@@ -7,7 +7,8 @@ import history from './history'
 import { getToken } from './token'
 
 // 域名地址
-export const realName = 'http://geek.itheima.net'
+// export const realName = 'http://geek.itheima.net'
+export const realName = 'http://toutiao.itheima.net'
 export const baseURL = realName + '/v1_0/'
 const request = axios.create({
   baseURL: baseURL,

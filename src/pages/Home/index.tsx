@@ -28,14 +28,7 @@ export default function Home() {
   const { userChannels } = useInitalState(getChannels, 'home')
   const { allChannels } = useInitalState(getAllChannels, 'home')
 
-  // console.log(allChannels)
-
-  // const selectChannels = allChannels.filter((item) => {
-  //   const index = userChannels.findIndex((obj) => obj.id === item.id)
-  //   return index === -1
-  // })
-
-  // console.log(selectChannels, 445)
+  console.log(allChannels)
 
   return (
     <div className={styles.home}>
